@@ -1,6 +1,7 @@
 package com.example.talkapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
@@ -73,5 +78,32 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+
+    }
+
+    private void signIn(){
+
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+
+        mFirebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()){
+                            Snackbar.make(btnLogin, task.getException().getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        startActivity(new Intent(getActivity(), ChatActivity.class));
+                        getActivity().finish();
+                    }
+                });
     }
 }

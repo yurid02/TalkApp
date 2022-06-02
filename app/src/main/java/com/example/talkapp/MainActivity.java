@@ -1,19 +1,27 @@
 package com.example.talkapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity implements SignUpFragment.OnSignUpListener {
 
     FragmentContainerView mFragmentContainerView;
+    final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkSignedIn();
 
         mFragmentContainerView = findViewById(R.id.fragmentContainer);
 
@@ -50,5 +58,18 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
                         .commit();
                 break;
         }
+    }
+
+    private void checkSignedIn(){
+        mFirebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                if (user != null){
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    finish();
+                }
+            }
+        });
     }
 }
