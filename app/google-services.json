@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "786969861984",
+    "project_id": "talkapp-9e900",
+    "storage_bucket": "talkapp-9e900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786969861984:android:792f3be32fab7a1c334805",
+        "android_client_info": {
+          "package_name": "com.example.talkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786969861984-cctqf1pumjd86hvo8ngeebkcml6437r7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIWEY5Pqj9k6cRpQpIAdoi10nR_8qA68A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786969861984-cctqf1pumjd86hvo8ngeebkcml6437r7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

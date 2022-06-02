@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/reciver_layout.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/sender_layout.xml" value="0.6666666666666666" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout/fragment_log_in.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout/fragment_sign_up.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout/reciver_layout.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout/sender_layout.xml" value="0.2" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/TalkApp/app/src/main/res/drawable-night/message_style.xml" value="0.169" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/TalkApp/app/src/main/res/drawable-night/message_style_ingoing.xml" value="0.169" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/TalkApp/app/src/main/res/drawable-night/message_style_outgoing.xml" value="0.169" />
