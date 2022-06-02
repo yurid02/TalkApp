@@ -1,4 +1,4 @@
-package com.example.talkapp;
+package com.example.talkapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 
+import com.example.talkapp.fragments.LoginFragment;
+import com.example.talkapp.R;
+import com.example.talkapp.fragments.SignUpFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

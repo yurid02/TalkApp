@@ -1,8 +1,10 @@
-package com.example.talkapp;
+package com.example.talkapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.talkapp.R;
 
 public class ChatActivity extends AppCompatActivity {
 

@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TalkApp">
         <activity
-            android:name=".ChatActivity"
+            android:name=".activities.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
