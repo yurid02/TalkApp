@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C1BEBE"
+    android:background="@color/background"
     tools:context=".activities.ChatActivity">
 
     <RelativeLayout
@@ -12,13 +12,13 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            tools:listitem="@layout/item_message"
             android:id="@+id/rvChat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/llMessage"
             android:layout_alignParentTop="true"
-            android:padding="10dp" />
+            android:padding="10dp"
+            tools:listitem="@layout/item_message" />
 
         <LinearLayout
             android:id="@+id/llMessage"
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:background="@drawable/et_style"
-                android:hint="Enter Message Here" />
+                android:hint="@string/entermessage" />
 
             <ImageView
                 android:id="@+id/ivSend"

@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/drawable/background_left.xml" value="0.1675" />
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/layout/activity_chat.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/layout/fragment_log_in.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/layout/fragment_sign_up.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Click/AndroidStudioProjects/TalkApp/app/src/main/res/layout/item_message.xml" value="0.2" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/reciver_layout.xml" value="0.2" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/TalkApp/app/src/main/res/layout-night/sender_layout.xml" value="0.6666666666666666" />

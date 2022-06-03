@@ -2,4 +2,16 @@
     <string name="app_name">TalkApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titleApp">Welcom !</string>
+    <string name="name">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="re_password">Re-Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="login">Login</string>
+    <string name="dontAccount">Dont have an Account?</string>
+    <string name="haveAccount">Have Account !</string>
+    <string name="entermessage">Enter Message Here</string>
+    <string name="message"> Message</string>
+
 </resources>

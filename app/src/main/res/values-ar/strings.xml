@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">تطبيق محادثة</string>
+    <string name="titleApp">مرحبا !</string>
+    <string name="name">الاسم</string>
+    <string name="email">الايميل</string>
+    <string name="password">كلمة المرور</string>
+    <string name="re_password">اعادة كلمة المرور</string>
+    <string name="sign_up">تسجيل حساب</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="dontAccount">ليس لديك حساب ؟</string>
+    <string name="haveAccount">لديك حساب !</string>
+    <string name="entermessage">اكتب رسالة هنا</string>
+    <string name="message">رسالة</string>
+</resources>
