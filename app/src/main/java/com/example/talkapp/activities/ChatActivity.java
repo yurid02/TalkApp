@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
@@ -47,46 +48,10 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseStorage mFirebaseStorage;
     private String userName;
-    FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder> firebaseRecyclerAdapter;
-
-    private ActivityResultLauncher<Intent> uploadPhotoLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Uri selectedImageUri = result.getData().getData();
-                        StorageReference photoRef =
-                                mFirebaseStorage.getReference().child(selectedImageUri.getLastPathSegment());
-                        UploadTask uploadTask = photoRef.putFile(selectedImageUri);
-                        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if (!task.isSuccessful()) {
-                                    throw task.getException();
-                                }
-
-                                // Continue with the task to get the download URL
-                                return photoRef.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if (task.isSuccessful()) {
-                                    Uri downloadUri = task.getResult();
-                                    ChatMessage chatMessage =
-                                            new ChatMessage(null, userName, downloadUri.toString(), System.currentTimeMillis());
-                                    mFirebaseDatabase.getReference("messages").push().setValue(chatMessage);
-                                } else {
-                                    System.out.println(task.getException().toString());
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-    );
-
+    private DatabaseReference mDatabaseReference;
+    private FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder> mFirebaseRecyclerAdapter;
+    private ChildEventListener mChildEventListener;
+    private ActivityResultLauncher<Intent> uploadPhotoLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +60,38 @@ public class ChatActivity extends AppCompatActivity {
 
         initVars();
 
+        initListeners();
+
+        rvChat.setAdapter(mFirebaseRecyclerAdapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvChat.setLayoutManager(layoutManager);
+
+        attachDatabaseEventListener();
+
+        mFirebaseRecyclerAdapter.startListening();
+
+    }
+
+    private void initVars() {
+        ivSend = findViewById(R.id.ivSend);
+        ivAddImage = findViewById(R.id.ivAddImage);
+        etMessage = findViewById(R.id.etMessage);
+        rvChat = findViewById(R.id.rvChat);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference("messages");
         userName = mFirebaseAuth.getCurrentUser().getDisplayName();
 
-        Query query = mFirebaseDatabase.getReference("messages");
+        Query query = mDatabaseReference;
 
         FirebaseRecyclerOptions<ChatMessage> options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
                         .setQuery(query, ChatMessage.class)
                         .build();
 
-        firebaseRecyclerAdapter =
+        mFirebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder>(options) {
                     @NonNull
                     @Override
@@ -135,80 +122,45 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 };
 
-        rvChat.setAdapter(firebaseRecyclerAdapter);
+        uploadPhotoLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Uri selectedImageUri = result.getData().getData();
+                            StorageReference photoRef =
+                                    mFirebaseStorage.getReference().child(selectedImageUri.getLastPathSegment());
+                            UploadTask uploadTask = photoRef.putFile(selectedImageUri);
+                            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rvChat.setLayoutManager(layoutManager);
-
-        ivSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (etMessage.getText().toString().trim().length() > 0) {
-                    ChatMessage chatMessage = new ChatMessage();
-                    chatMessage.setText(etMessage.getText().toString());
-                    chatMessage.setName(userName);
-                    chatMessage.setTimestamp(System.currentTimeMillis());
-
-                    mFirebaseDatabase.getReference("messages").push().setValue(chatMessage);
-
-                    etMessage.setText("");
+                                    // Continue with the task to get the download URL
+                                    return photoRef.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri downloadUri = task.getResult();
+                                        ChatMessage chatMessage =
+                                                new ChatMessage(null, userName, downloadUri.toString(), System.currentTimeMillis());
+                                        mDatabaseReference.push().setValue(chatMessage);
+                                    } else {
+                                        System.out.println(task.getException().toString());
+                                    }
+                                }
+                            });
+                        }
+                    }
                 }
-            }
-        });
-
-        ivAddImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent openPhotoPicker = new Intent();
-                openPhotoPicker.setAction(Intent.ACTION_GET_CONTENT);
-                openPhotoPicker.setType("image/jpeg");
-                openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                uploadPhotoLauncher.launch(openPhotoPicker);
-            }
-        });
-
-        mFirebaseDatabase.getReference().addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                rvChat.smoothScrollToPosition(firebaseRecyclerAdapter.getItemCount() + 1);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        firebaseRecyclerAdapter.startListening();
+        );
 
     }
-
-    private void initVars() {
-        ivSend = findViewById(R.id.ivSend);
-        ivAddImage = findViewById(R.id.ivAddImage);
-        etMessage = findViewById(R.id.etMessage);
-        rvChat = findViewById(R.id.rvChat);
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = mFirebaseDatabase.getInstance();
-        mFirebaseStorage = FirebaseStorage.getInstance();
-    }
-
 
     static class ChatMessagesViewHolder extends RecyclerView.ViewHolder {
 
@@ -221,6 +173,69 @@ public class ChatActivity extends AppCompatActivity {
             tvMessage = itemView.findViewById(R.id.tvMessage);
             tvName = itemView.findViewById(R.id.tvName);
         }
+    }
+
+
+    private void attachDatabaseEventListener(){
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    rvChat.smoothScrollToPosition(mFirebaseRecyclerAdapter.getItemCount() + 1);
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+        }
+
+        mFirebaseDatabase.getReference().addChildEventListener(mChildEventListener);
+    }
+
+    private void initListeners(){
+        ivAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openPhotoPicker = new Intent();
+                openPhotoPicker.setAction(Intent.ACTION_GET_CONTENT);
+                openPhotoPicker.setType("image/jpeg");
+                openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                uploadPhotoLauncher.launch(openPhotoPicker);
+            }
+        });
+
+        ivSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (etMessage.getText().toString().trim().length() > 0) {
+                    ChatMessage chatMessage = new ChatMessage();
+                    chatMessage.setText(etMessage.getText().toString());
+                    chatMessage.setName(userName);
+                    chatMessage.setTimestamp(System.currentTimeMillis());
+
+                    mDatabaseReference.push().setValue(chatMessage);
+
+                    etMessage.setText("");
+                }
+            }
+        });
     }
 
 }
