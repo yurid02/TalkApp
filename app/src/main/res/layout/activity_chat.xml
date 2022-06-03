@@ -45,11 +45,13 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="13dp"
                 android:layout_marginLeft="5dp"
+                android:textColorHint="@color/edit"
                 android:layout_weight="1"
                 android:padding="5dp"
+                android:hint="@string/entermessage"
                 android:textColor="@color/edit"
                 android:background="@drawable/et_style"
-                android:hint="@string/entermessage" />
+                 />
 
             <ImageView
                 android:id="@+id/ivSend"
