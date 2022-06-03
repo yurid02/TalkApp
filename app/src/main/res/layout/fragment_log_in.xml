@@ -38,27 +38,27 @@
 
         <TextView
             android:id="@+id/tvEmail"
-            android:layout_width="80dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="36dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:text="@string/email"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etEmail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Welcome" />
 
         <TextView
             android:id="@+id/tvPassword"
-            android:layout_width="78dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="36dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:text="@string/password"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
@@ -66,7 +66,6 @@
             android:id="@+id/etEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:backgroundTint="#495"
             android:ems="10"
             android:hint="@string/editemail"

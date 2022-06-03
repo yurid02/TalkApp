@@ -40,37 +40,37 @@
 
         <TextView
             android:id="@+id/tvUsername"
-            android:layout_width="80dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/name"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etUsername"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/etUsername" />
 
         <TextView
             android:id="@+id/tvEmail"
-            android:layout_width="80dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/email"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etEmail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/etEmail" />
 
         <TextView
             android:id="@+id/tvPassword"
-            android:layout_width="78dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="52dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/password"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/etPassword" />
 
@@ -119,12 +119,12 @@
         <TextView
             android:id="@+id/tvRePassword"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginStart="36dp"
+            android:layout_height="wrap_content"
             android:text="@string/re_password"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/etRePassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/etRePassword" />
 
