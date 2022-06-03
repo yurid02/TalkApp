@@ -11,6 +11,10 @@
     <string name="login">تسجيل دخول</string>
     <string name="dontAccount">ليس لديك حساب ؟</string>
     <string name="haveAccount">لديك حساب !</string>
-    <string name="entermessage">اكتب رسالة هنا</string>
+    <string name="entermessage">ادخل رسالة هنا</string>
     <string name="message">رسالة</string>
+    <string name="editname">أدخل اسمك</string>
+    <string name="editemail"> أدخل ايميلك</string>
+    <string name="editpassword"> أدخل كلمة مرورك</string>
+    <string name="editRepassword"> أعد ادخال كلمة المرور الخاصة بك</string>
 </resources>

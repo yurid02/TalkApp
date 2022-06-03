@@ -13,5 +13,9 @@
     <string name="haveAccount">Have Account !</string>
     <string name="entermessage">Enter Message Here</string>
     <string name="message"> Message</string>
+    <string name="editname"> Enter your Name</string>
+    <string name="editemail"> Enter your Email</string>
+    <string name="editpassword"> Enter your Password</string>
+    <string name="editRepassword"> Enter your Re-Password</string>
 
 </resources>

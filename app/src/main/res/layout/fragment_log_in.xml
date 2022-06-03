@@ -29,7 +29,7 @@
             android:layout_marginTop="44dp"
             android:text="@string/titleApp"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.481"
@@ -44,7 +44,7 @@
             android:layout_marginTop="56dp"
             android:text="@string/email"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Welcome" />
@@ -57,7 +57,7 @@
             android:layout_marginTop="50dp"
             android:text="@string/password"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
@@ -70,6 +70,8 @@
             android:layout_marginTop="43dp"
             android:backgroundTint="#495"
             android:ems="10"
+            android:hint="@string/editemail"
+            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toEndOf="@+id/tvEmail"
             app:layout_constraintTop_toBottomOf="@+id/Welcome" />
@@ -83,6 +85,8 @@
             android:backgroundTint="#495"
             android:ems="10"
             android:inputType="textPassword"
+            android:hint="@string/editpassword"
+            android:textColorHint="@color/message"
             app:layout_constraintStart_toEndOf="@+id/tvPassword"
             app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
@@ -117,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="84dp"
             android:text="@string/dontAccount"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/btnSignup"
             app:layout_constraintHorizontal_bias="0.484"

@@ -31,7 +31,7 @@
             android:layout_marginTop="32dp"
             android:text="@string/titleApp"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.471"
@@ -83,6 +83,8 @@
             android:backgroundTint="#495"
             android:ems="10"
             android:inputType="textPassword"
+            android:hint="@string/editpassword"
+            android:textColorHint="@color/message"
             app:layout_constraintStart_toEndOf="@+id/tvPassword"
             app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
@@ -94,6 +96,8 @@
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
+            android:hint="@string/editemail"
+            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toEndOf="@+id/tvEmail"
             app:layout_constraintTop_toBottomOf="@+id/etUsername" />
@@ -106,6 +110,8 @@
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
+            android:hint="@string/editname"
+            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toEndOf="@+id/tvUsername"
             app:layout_constraintTop_toBottomOf="@id/Welcome" />
@@ -130,6 +136,8 @@
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
+            android:hint="@string/editRepassword"
+            android:textColorHint="@color/message"
             android:inputType="textPassword"
             app:layout_constraintStart_toEndOf="@+id/tvPassword"
             app:layout_constraintTop_toBottomOf="@+id/etPassword" />
