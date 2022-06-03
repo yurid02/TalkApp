@@ -47,6 +47,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:padding="5dp"
+                android:textColor="@color/edit"
                 android:background="@drawable/et_style"
                 android:hint="@string/entermessage" />
 

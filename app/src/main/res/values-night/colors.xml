@@ -3,6 +3,7 @@
     <color name="text_color">#FFFFFFFF</color>
     <color name="message">#FAFAFA</color>
     <color name="background">#1F311F</color>
+    <color name="edit">#F0080908</color>
     <color name="back_card">#F0447C3E</color>
 
 

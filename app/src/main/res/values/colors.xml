@@ -12,4 +12,5 @@
     <color name="message">#FF000000</color>
     <color name="background">#C1BEBE</color>
     <color name="back_card">#AEDFAF</color>
+    <color name="edit">#F00E0E0E</color>
 </resources>
