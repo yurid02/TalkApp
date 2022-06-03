@@ -4,14 +4,24 @@ import java.io.Serializable;
 
 public class ChatMessage implements Serializable {
     String text,name, photoUrl;
+    long timestamp;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String text, String name, String photoUrl) {
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public ChatMessage(String text, String name, String photoUrl, long timestamp) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
+        this.timestamp = timestamp;
     }
 
     public String getText() {

@@ -89,7 +89,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void signIn(){
+    private void signIn() {
 
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
@@ -98,11 +98,11 @@ public class LoginFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()){
+                        if (!task.isSuccessful()) {
                             Snackbar.make(btnLogin, task.getException().getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
                             return;
                         }
-
+//
                         startActivity(new Intent(getActivity(), ChatActivity.class));
                         getActivity().finish();
                     }

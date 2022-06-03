@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpFragment extends Fragment {
 
-    private EditText etEmail, etPassword, etRePassword;
+    private EditText etEmail, etPassword, etRePassword, etUsername;
     private Button btnSignup, btnLogin;
     private OnSignUpListener mOnSignUpListener;
     private FirebaseAuth mFirebaseAuth;
@@ -45,6 +45,7 @@ public class SignUpFragment extends Fragment {
         etRePassword = view.findViewById(R.id.etRePassword);
         btnSignup = view.findViewById(R.id.btnSignup);
         btnLogin = view.findViewById(R.id.btnLogin);
+        etUsername = view.findViewById(R.id.etUsername);
 
         return view;
     }
@@ -60,7 +61,10 @@ public class SignUpFragment extends Fragment {
                 password = etPassword.getText().toString();
                 rePassword = etRePassword.getText().toString();
 
-                if (!(password.equals(rePassword))) {
+                if (TextUtils.isEmpty(etUsername.getText().toString())) {
+                    Snackbar.make(btnSignup, "Enter username", Snackbar.LENGTH_SHORT).show();
+                    return;
+                } else if (!(password.equals(rePassword))) {
                     Snackbar.make(btnSignup, "passwords do not match", Snackbar.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -72,20 +76,23 @@ public class SignUpFragment extends Fragment {
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                Bundle bundle = new Bundle();
                                 if (!task.isSuccessful()) {
                                     String errorMessage = task.getException().getLocalizedMessage();
                                     Snackbar.make(btnSignup, errorMessage, Snackbar.LENGTH_SHORT).show();
-
                                     if (task.getException().toString().toLowerCase().contains("usercollision")) {
-                                        Bundle bundle = new Bundle();
                                         bundle.putInt("userStatus", 1);
                                         bundle.putString("email", email);
+
                                         mOnSignUpListener.onSignUpClickListener(bundle);
                                     }
-
                                     return;
                                 } else {
-                                    Snackbar.make(btnSignup, "Account created successfully", Snackbar.LENGTH_SHORT).show();
+                                    bundle.putInt("userStatus", 2);
+
+                                    bundle.putString("username", etUsername.getText().toString());
+
+                                    mOnSignUpListener.onSignUpClickListener(bundle);
                                 }
                             }
                         });
