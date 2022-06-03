@@ -67,28 +67,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="43dp"
             android:backgroundTint="#495"
             android:ems="10"
             android:hint="@string/editemail"
-            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
+            android:textColorHint="@color/message"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvEmail"
-            app:layout_constraintTop_toBottomOf="@+id/Welcome" />
+            app:layout_constraintTop_toTopOf="@+id/tvEmail" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="36dp"
             android:backgroundTint="#495"
             android:ems="10"
-            android:inputType="textPassword"
             android:hint="@string/editpassword"
+            android:inputType="textPassword"
             android:textColorHint="@color/message"
-            app:layout_constraintStart_toEndOf="@+id/tvPassword"
-            app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+            app:layout_constraintEnd_toEndOf="@+id/etEmail"
+            app:layout_constraintStart_toStartOf="@+id/etEmail"
+            app:layout_constraintTop_toTopOf="@+id/tvPassword" />
 
         <Button
             android:id="@+id/btnLogin"

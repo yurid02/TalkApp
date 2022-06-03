@@ -78,41 +78,41 @@
             android:id="@+id/etPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
-            android:inputType="textPassword"
             android:hint="@string/editpassword"
+            android:inputType="textPassword"
             android:textColorHint="@color/message"
-            app:layout_constraintStart_toEndOf="@+id/tvPassword"
+            app:layout_constraintEnd_toEndOf="@+id/etEmail"
+            app:layout_constraintStart_toStartOf="@+id/etUsername"
             app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
             android:hint="@string/editemail"
-            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
-            app:layout_constraintStart_toEndOf="@+id/tvEmail"
+            android:textColorHint="@color/message"
+            app:layout_constraintEnd_toEndOf="@+id/etUsername"
+            app:layout_constraintStart_toStartOf="@+id/etUsername"
             app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
             android:hint="@string/editname"
-            android:textColorHint="@color/message"
             android:inputType="textEmailAddress"
+            android:textColorHint="@color/message"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvUsername"
             app:layout_constraintTop_toBottomOf="@id/Welcome" />
 
@@ -132,14 +132,14 @@
             android:id="@+id/etRePassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="28dp"
             android:backgroundTint="#495"
             android:ems="10"
             android:hint="@string/editRepassword"
-            android:textColorHint="@color/message"
             android:inputType="textPassword"
-            app:layout_constraintStart_toEndOf="@+id/tvPassword"
+            android:textColorHint="@color/message"
+            app:layout_constraintEnd_toEndOf="@+id/etPassword"
+            app:layout_constraintStart_toStartOf="@+id/etUsername"
             app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
         <Button
