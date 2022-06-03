@@ -1,7 +1,6 @@
 package com.example.talkapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.talkapp.R;
-import com.example.talkapp.activities.ChatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -100,11 +98,7 @@ public class LoginFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
                             Snackbar.make(btnLogin, task.getException().getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
-                            return;
                         }
-//
-                        startActivity(new Intent(getActivity(), ChatActivity.class));
-                        getActivity().finish();
                     }
                 });
     }

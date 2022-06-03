@@ -17,5 +17,6 @@
     <string name="editemail"> Enter your Email</string>
     <string name="editpassword"> Enter your Password</string>
     <string name="editRepassword"> Enter your Re-Password</string>
+    <string name="signOut"> Sign out </string>
 
 </resources>

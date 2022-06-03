@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -71,6 +74,25 @@ public class ChatActivity extends AppCompatActivity {
 
         mFirebaseRecyclerAdapter.startListening();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuSignOut:
+                mFirebaseAuth.signOut();
+                onSignedOutCleanup();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initVars() {
@@ -176,7 +198,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    private void attachDatabaseEventListener(){
+    private void attachDatabaseEventListener() {
         if (mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
                 @Override
@@ -208,7 +230,7 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseDatabase.getReference().addChildEventListener(mChildEventListener);
     }
 
-    private void initListeners(){
+    private void initListeners() {
         ivAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -236,6 +258,20 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void onSignedOutCleanup() {
+        userName = "ANONYMOUS";
+        detachDatabaseListener();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    private void detachDatabaseListener() {
+        if (mChildEventListener != null) {
+            mDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
     }
 
 }
