@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
                                     }
                                 }
                             });
-                }else if (user != null && mUserStatusNumber == 1){
+                }else if (user != null){
                     startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     finish();
                 }

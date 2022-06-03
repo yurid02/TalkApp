@@ -1,5 +1,7 @@
 package com.example.talkapp.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,9 +24,15 @@ import com.example.talkapp.R;
 import com.example.talkapp.models.ChatMessage;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -29,7 +41,47 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView rvChat;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseStorage mFirebaseStorage;
     private String userName;
+    FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder> firebaseRecyclerAdapter;
+
+    private ActivityResultLauncher<Intent> uploadPhotoLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Uri selectedImageUri = result.getData().getData();
+                        StorageReference photoRef =
+                                mFirebaseStorage.getReference().child(selectedImageUri.getLastPathSegment());
+                        UploadTask uploadTask = photoRef.putFile(selectedImageUri);
+                        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
+
+                                // Continue with the task to get the download URL
+                                return photoRef.getDownloadUrl();
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadUri = task.getResult();
+                                    ChatMessage chatMessage =
+                                            new ChatMessage(null, userName, downloadUri.toString(), System.currentTimeMillis());
+                                    mFirebaseDatabase.getReference("messages").push().setValue(chatMessage);
+                                } else {
+                                    System.out.println(task.getException().toString());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+    );
 
 
     @Override
@@ -48,41 +100,40 @@ public class ChatActivity extends AppCompatActivity {
                         .setQuery(query, ChatMessage.class)
                         .build();
 
-        FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder> firebaseRecyclerAdapter =
+        firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder>(options) {
-            @NonNull
-            @Override
-            public ChatMessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new ChatMessagesViewHolder(
-                        LayoutInflater.from(parent.getContext())
-                                .inflate(R.layout.item_message, parent, false)
-                );
-            }
+                    @NonNull
+                    @Override
+                    public ChatMessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        return new ChatMessagesViewHolder(
+                                LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.item_message, parent, false)
+                        );
+                    }
 
-            @Override
-            protected void onBindViewHolder(@NonNull ChatMessagesViewHolder holder, int position, @NonNull ChatMessage model) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull ChatMessagesViewHolder holder, int position, @NonNull ChatMessage model) {
 
-                boolean isPhoto = model.getPhotoUrl() != null;
+                        boolean isPhoto = model.getPhotoUrl() != null;
 
-                if (isPhoto){
-                    holder.tvMessage.setVisibility(View.GONE);
-                    holder.ivPhoto.setVisibility(View.VISIBLE);
-                    Glide.with(holder.ivPhoto.getContext())
-                            .load(model.getPhotoUrl())
-                            .into(holder.ivPhoto);
-                }else{
-                    holder.tvMessage.setVisibility(View.VISIBLE);
-                    holder.ivPhoto.setVisibility(View.GONE);
-                    holder.tvMessage.setText(model.getText());
-                }
-                holder.tvName.setText(model.getName());
-            }
-        };
+                        if (isPhoto) {
+                            holder.tvMessage.setVisibility(View.GONE);
+                            holder.ivPhoto.setVisibility(View.VISIBLE);
+                            Glide.with(holder.ivPhoto.getContext())
+                                    .load(model.getPhotoUrl())
+                                    .into(holder.ivPhoto);
+                        } else {
+                            holder.tvMessage.setVisibility(View.VISIBLE);
+                            holder.ivPhoto.setVisibility(View.GONE);
+                            holder.tvMessage.setText(model.getText());
+                        }
+                        holder.tvName.setText(model.getName());
+                    }
+                };
 
         rvChat.setAdapter(firebaseRecyclerAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setReverseLayout(true);
         rvChat.setLayoutManager(layoutManager);
 
         ivSend.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +147,21 @@ public class ChatActivity extends AppCompatActivity {
                     chatMessage.setTimestamp(System.currentTimeMillis());
 
                     mFirebaseDatabase.getReference("messages").push().setValue(chatMessage);
+                    rvChat.smoothScrollToPosition(firebaseRecyclerAdapter.getItemCount() + 1);
 
                     etMessage.setText("");
                 }
+            }
+        });
+
+        ivAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openPhotoPicker = new Intent();
+                openPhotoPicker.setAction(Intent.ACTION_GET_CONTENT);
+                openPhotoPicker.setType("image/jpeg");
+                openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                uploadPhotoLauncher.launch(openPhotoPicker);
             }
         });
 
@@ -113,7 +176,7 @@ public class ChatActivity extends AppCompatActivity {
         rvChat = findViewById(R.id.rvChat);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = mFirebaseDatabase.getInstance();
-//        mFirebaseStorage = FirebaseStorage.getInstance();
+        mFirebaseStorage = FirebaseStorage.getInstance();
     }
 
 
