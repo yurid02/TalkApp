@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,9 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
@@ -147,7 +151,6 @@ public class ChatActivity extends AppCompatActivity {
                     chatMessage.setTimestamp(System.currentTimeMillis());
 
                     mFirebaseDatabase.getReference("messages").push().setValue(chatMessage);
-                    rvChat.smoothScrollToPosition(firebaseRecyclerAdapter.getItemCount() + 1);
 
                     etMessage.setText("");
                 }
@@ -162,6 +165,33 @@ public class ChatActivity extends AppCompatActivity {
                 openPhotoPicker.setType("image/jpeg");
                 openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 uploadPhotoLauncher.launch(openPhotoPicker);
+            }
+        });
+
+        mFirebaseDatabase.getReference().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                rvChat.smoothScrollToPosition(firebaseRecyclerAdapter.getItemCount() + 1);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
