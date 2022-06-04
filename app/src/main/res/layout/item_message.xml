@@ -20,16 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/ivPhoto"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:adjustViewBounds="true"
-                android:padding="5dp" />
-
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
@@ -51,6 +41,17 @@
                 android:textColor="@color/message"
                 android:textSize="15sp"
                 tools:text="@string/message" />
+
+            <ImageView
+                android:id="@+id/ivPhoto"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:padding="5dp" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
