@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
         app:cardBackgroundColor="@color/back_card"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
@@ -18,14 +18,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="56dp"
-                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/message"
                 android:textStyle="bold"
@@ -36,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="56dp"
-                android:padding="5dp"
+                android:layout_margin="2dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/message"
                 android:textSize="15sp"
@@ -47,24 +48,22 @@
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:adjustViewBounds="true"
                 android:padding="5dp" />
 
 
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:minWidth="56dp"
-                    android:padding="5dp"
+                    android:layout_margin="4dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/message"
                     android:textSize="12sp"
@@ -72,17 +71,14 @@
 
                 <TextView
                     android:id="@+id/tvIsEdited"
-                    android:layout_weight="1"
-                    android:gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:minWidth="56dp"
-                    android:padding="5dp"
+                    android:layout_margin="4dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/message"
                     android:textSize="12sp"
-                    tools:text="edited" />
+                    android:padding="2dp"
+                    tools:text="@string/edited_message" />
 
             </LinearLayout>
 
