@@ -148,6 +148,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
 
                         if (model.isEdited()) {
+                            holder.tvIsEdited.setVisibility(View.VISIBLE);
                             holder.tvIsEdited.setText(R.string.edited_message);
                         } else {
                             holder.tvIsEdited.setVisibility(View.GONE);

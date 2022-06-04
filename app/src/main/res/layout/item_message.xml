@@ -71,6 +71,8 @@
 
                 <TextView
                     android:id="@+id/tvIsEdited"
+                    android:layout_weight="1"
+                    android:gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
