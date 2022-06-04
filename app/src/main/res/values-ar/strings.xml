@@ -18,5 +18,7 @@
     <string name="editpassword"> أدخل كلمة مرورك</string>
     <string name="editRepassword"> أعد ادخال كلمة المرور الخاصة بك</string>
     <string name="signOut"> تسجيل الخروج </string>
+    <string name="delete_message">حذف الرسالة</string>
+    <string name="edit_message">تعديل الرسالة</string>
 
 </resources>

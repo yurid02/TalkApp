@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -141,6 +142,32 @@ public class ChatActivity extends AppCompatActivity {
                             holder.tvMessage.setText(model.getText());
                         }
                         holder.tvName.setText(model.getName());
+                        if (model.getUserId().equals(mFirebaseAuth.getUid())) {
+                            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    PopupMenu popupMenu = new PopupMenu(ChatActivity.this, view);
+                                    popupMenu.getMenuInflater()
+                                            .inflate(R.menu.menu_messgae_popup, popupMenu.getMenu());
+
+                                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                        @Override
+                                        public boolean onMenuItemClick(MenuItem menuItem) {
+                                            switch (menuItem.getItemId()) {
+                                                case R.id.delete_message:
+                                                    mDatabaseReference.child(model.getMessageId()).removeValue();
+                                                    break;
+                                                case R.id.editMessage:
+
+                                                    break;
+                                            }
+                                            return true;
+                                        }
+                                    });
+                                    popupMenu.show();
+                                }
+                            });
+                        }
                     }
                 };
 
@@ -169,9 +196,18 @@ public class ChatActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         Uri downloadUri = task.getResult();
-                                        ChatMessage chatMessage =
-                                                new ChatMessage(null, userName, downloadUri.toString(), System.currentTimeMillis());
-                                        mDatabaseReference.push().setValue(chatMessage);
+                                        DatabaseReference currentModel = mDatabaseReference.push();
+
+                                        ChatMessage chatMessage = new ChatMessage();
+
+                                        chatMessage.setText(null);
+                                        chatMessage.setMessageId(currentModel.getKey());
+                                        chatMessage.setName(userName);
+                                        chatMessage.setTimestamp(System.currentTimeMillis());
+                                        chatMessage.setPhotoUrl(downloadUri.toString());
+                                        chatMessage.setUserId(mFirebaseAuth.getUid());
+
+                                        currentModel.setValue(chatMessage);
                                     } else {
                                         System.out.println(task.getException().toString());
                                     }
@@ -247,12 +283,18 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (etMessage.getText().toString().trim().length() > 0) {
+
+                    DatabaseReference currentModel = mDatabaseReference.push();
+
                     ChatMessage chatMessage = new ChatMessage();
+
+                    chatMessage.setMessageId(currentModel.getKey());
                     chatMessage.setText(etMessage.getText().toString());
                     chatMessage.setName(userName);
                     chatMessage.setTimestamp(System.currentTimeMillis());
+                    chatMessage.setUserId(mFirebaseAuth.getUid());
 
-                    mDatabaseReference.push().setValue(chatMessage);
+                    currentModel.setValue(chatMessage);
 
                     etMessage.setText("");
                 }
