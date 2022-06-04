@@ -269,7 +269,6 @@ public class ChatActivity extends AppCompatActivity {
                         currentModel = mDatabaseReference.push();
                         chatMessage.setText(etMessage.getText().toString());
                         chatMessage.setEdited(false);
-//                        chatMessage.setTimestamp(System.currentTimeMillis());
 //                        currentModel.setValue(chatMessage);
                     } else {
 //                        chatMessage.setTimestamp(System.currentTimeMillis());
@@ -277,6 +276,7 @@ public class ChatActivity extends AppCompatActivity {
                         chatMessage.setText(etMessage.getText().toString());
                         isEdit = false;
                     }
+                    chatMessage.setTimestamp(System.currentTimeMillis());
                     chatMessage.setMessageId(currentModel.getKey());
 
                     currentModel.setValue(chatMessage);
