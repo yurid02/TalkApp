@@ -161,10 +161,10 @@ public class ChatActivity extends AppCompatActivity {
 
                         holder.tvDate.setText(sdf.format(timeD));
 
-                        if (model.getUserId().equals(mFirebaseAuth.getUid())) {
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (mFirebaseAuth.getCurrentUser().getUid().equals(model.getUserId())) {
                                     PopupMenu popupMenu = new PopupMenu(ChatActivity.this, view);
                                     popupMenu.getMenuInflater()
                                             .inflate(R.menu.menu_messgae_popup, popupMenu.getMenu());
@@ -180,7 +180,6 @@ public class ChatActivity extends AppCompatActivity {
                                                     etMessage.setText(model.getText());
                                                     etMessage.setSelection(model.getText().length());
                                                     currentModel = mDatabaseReference.child(model.getMessageId());
-
                                                     isEdit = true;
                                                     break;
                                             }
@@ -189,8 +188,8 @@ public class ChatActivity extends AppCompatActivity {
                                     });
                                     popupMenu.show();
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 };
 
@@ -263,20 +262,17 @@ public class ChatActivity extends AppCompatActivity {
 
 
                     ChatMessage chatMessage = new ChatMessage();
-                    chatMessage.setName(userName);
-                    chatMessage.setUserId(mFirebaseAuth.getUid());
 
                     if (!isEdit) {
                         currentModel = mDatabaseReference.push();
                         chatMessage.setText(etMessage.getText().toString());
-                        chatMessage.setEdited(false);
-//                        currentModel.setValue(chatMessage);
                     } else {
-//                        chatMessage.setTimestamp(System.currentTimeMillis());
                         chatMessage.setEdited(true);
                         chatMessage.setText(etMessage.getText().toString());
                         isEdit = false;
                     }
+                    chatMessage.setUserId(mFirebaseAuth.getUid());
+                    chatMessage.setName(userName);
                     chatMessage.setTimestamp(System.currentTimeMillis());
                     chatMessage.setMessageId(currentModel.getKey());
 
