@@ -20,5 +20,6 @@
     <string name="signOut"> Sign out </string>
     <string name="delete_message">Delete message</string>
     <string name="edit_message">Edit message</string>
+    <string name="edited_message">Edited</string>
 
 </resources>

@@ -5,8 +5,19 @@ import java.io.Serializable;
 public class ChatMessage implements Serializable {
     String text, name, photoUrl, messageId, userId;
     long timestamp;
+    boolean isEdited;
 
     public ChatMessage() {
+    }
+
+    public ChatMessage(String text, String name, String photoUrl, String messageId, String userId, long timestamp, boolean isEdited) {
+        this.text = text;
+        this.name = name;
+        this.photoUrl = photoUrl;
+        this.messageId = messageId;
+        this.userId = userId;
+        this.timestamp = timestamp;
+        this.isEdited = isEdited;
     }
 
     public long getTimestamp() {
@@ -17,14 +28,14 @@ public class ChatMessage implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public ChatMessage(String text, String name, String photoUrl, String messageId, String userId, long timestamp) {
-        this.text = text;
-        this.name = name;
-        this.photoUrl = photoUrl;
-        this.messageId = messageId;
-        this.userId = userId;
-        this.timestamp = timestamp;
+    public boolean isEdited() {
+        return isEdited;
     }
+
+    public void setEdited(boolean edited) {
+        isEdited = edited;
+    }
+
 
     public String getMessageId() {
         return messageId;

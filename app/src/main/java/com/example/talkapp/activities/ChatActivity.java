@@ -43,6 +43,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ChatActivity extends AppCompatActivity {
 
     private ImageView ivSend, ivAddImage;
@@ -56,6 +59,8 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter<ChatMessage, ChatMessagesViewHolder> mFirebaseRecyclerAdapter;
     private ChildEventListener mChildEventListener;
     private ActivityResultLauncher<Intent> uploadPhotoLauncher;
+    private boolean isEdit = false;
+    private DatabaseReference currentModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +146,20 @@ public class ChatActivity extends AppCompatActivity {
                             holder.ivPhoto.setVisibility(View.GONE);
                             holder.tvMessage.setText(model.getText());
                         }
+
+                        if (model.isEdited()) {
+                            holder.tvIsEdited.setText(R.string.edited_message);
+                        } else {
+                            holder.tvIsEdited.setVisibility(View.GONE);
+                        }
+
                         holder.tvName.setText(model.getName());
+
+                        Date timeD = new Date(model.getTimestamp());
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+                        holder.tvDate.setText(sdf.format(timeD));
+
                         if (model.getUserId().equals(mFirebaseAuth.getUid())) {
                             holder.itemView.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -158,7 +176,11 @@ public class ChatActivity extends AppCompatActivity {
                                                     mDatabaseReference.child(model.getMessageId()).removeValue();
                                                     break;
                                                 case R.id.editMessage:
+                                                    etMessage.setText(model.getText());
+                                                    etMessage.setSelection(model.getText().length());
+                                                    currentModel = mDatabaseReference.child(model.getMessageId());
 
+                                                    isEdit = true;
                                                     break;
                                             }
                                             return true;
@@ -220,17 +242,49 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    static class ChatMessagesViewHolder extends RecyclerView.ViewHolder {
+    private void initListeners() {
+        ivAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openPhotoPicker = new Intent();
+                openPhotoPicker.setAction(Intent.ACTION_GET_CONTENT);
+                openPhotoPicker.setType("image/jpeg");
+                openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                uploadPhotoLauncher.launch(openPhotoPicker);
+            }
+        });
 
-        ImageView ivPhoto;
-        TextView tvMessage, tvName;
+        ivSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        public ChatMessagesViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivPhoto = itemView.findViewById(R.id.ivPhoto);
-            tvMessage = itemView.findViewById(R.id.tvMessage);
-            tvName = itemView.findViewById(R.id.tvName);
-        }
+                if (etMessage.getText().toString().trim().length() > 0) {
+
+
+                    ChatMessage chatMessage = new ChatMessage();
+                    chatMessage.setName(userName);
+                    chatMessage.setUserId(mFirebaseAuth.getUid());
+
+                    if (!isEdit) {
+                        currentModel = mDatabaseReference.push();
+                        chatMessage.setText(etMessage.getText().toString());
+                        chatMessage.setEdited(false);
+//                        chatMessage.setTimestamp(System.currentTimeMillis());
+//                        currentModel.setValue(chatMessage);
+                    } else {
+//                        chatMessage.setTimestamp(System.currentTimeMillis());
+                        chatMessage.setEdited(true);
+                        chatMessage.setText(etMessage.getText().toString());
+                        isEdit = false;
+                    }
+                    chatMessage.setMessageId(currentModel.getKey());
+
+                    currentModel.setValue(chatMessage);
+
+                    etMessage.setText("");
+                }
+            }
+        });
     }
 
 
@@ -266,40 +320,19 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseDatabase.getReference().addChildEventListener(mChildEventListener);
     }
 
-    private void initListeners() {
-        ivAddImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent openPhotoPicker = new Intent();
-                openPhotoPicker.setAction(Intent.ACTION_GET_CONTENT);
-                openPhotoPicker.setType("image/jpeg");
-                openPhotoPicker.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                uploadPhotoLauncher.launch(openPhotoPicker);
-            }
-        });
+    static class ChatMessagesViewHolder extends RecyclerView.ViewHolder {
 
-        ivSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ImageView ivPhoto;
+        TextView tvMessage, tvName, tvIsEdited, tvDate;
 
-                if (etMessage.getText().toString().trim().length() > 0) {
-
-                    DatabaseReference currentModel = mDatabaseReference.push();
-
-                    ChatMessage chatMessage = new ChatMessage();
-
-                    chatMessage.setMessageId(currentModel.getKey());
-                    chatMessage.setText(etMessage.getText().toString());
-                    chatMessage.setName(userName);
-                    chatMessage.setTimestamp(System.currentTimeMillis());
-                    chatMessage.setUserId(mFirebaseAuth.getUid());
-
-                    currentModel.setValue(chatMessage);
-
-                    etMessage.setText("");
-                }
-            }
-        });
+        public ChatMessagesViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivPhoto = itemView.findViewById(R.id.ivPhoto);
+            tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvIsEdited = itemView.findViewById(R.id.tvIsEdited);
+            tvDate = itemView.findViewById(R.id.tvDate);
+        }
     }
 
     private void onSignedOutCleanup() {

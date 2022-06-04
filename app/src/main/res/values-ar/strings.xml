@@ -20,5 +20,6 @@
     <string name="signOut"> تسجيل الخروج </string>
     <string name="delete_message">حذف الرسالة</string>
     <string name="edit_message">تعديل الرسالة</string>
+    <string name="edited_message">تمّ التعديل</string>
 
 </resources>
