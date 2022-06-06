@@ -85,7 +85,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.menu_sign_out, menu);
         return true;
     }
 
@@ -164,7 +164,7 @@ public class ChatActivity extends AppCompatActivity {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (mFirebaseAuth.getCurrentUser().getUid().equals(model.getUserId())) {
+                                if (mFirebaseAuth.getCurrentUser().getUid().equals(model.getUserId()) && !isPhoto) {
                                     PopupMenu popupMenu = new PopupMenu(ChatActivity.this, view);
                                     popupMenu.getMenuInflater()
                                             .inflate(R.menu.menu_messgae_popup, popupMenu.getMenu());
