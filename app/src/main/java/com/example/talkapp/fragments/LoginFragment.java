@@ -25,7 +25,7 @@ public class LoginFragment extends Fragment {
     EditText etEmail, etPassword;
     Button btnLogin, btnSignup;
     private FirebaseAuth mFirebaseAuth;
-    private SignUpFragment.OnSignUpListener mOnSignUpListener;
+    private SignUpFragment.OnSignInListener mOnSignInListener;
 
     public LoginFragment() {
 
@@ -34,8 +34,8 @@ public class LoginFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragment.OnSignUpListener) {
-            mOnSignUpListener = (SignUpFragment.OnSignUpListener) context;
+        if (context instanceof SignUpFragment.OnSignInListener) {
+            mOnSignInListener = (SignUpFragment.OnSignInListener) context;
         }
     }
 
@@ -75,7 +75,7 @@ public class LoginFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("userStatus", 0);
                 bundle.putString("email", etEmail.getText().toString());
-                mOnSignUpListener.onSignUpClickListener(bundle);
+                mOnSignInListener.onSignInListener(bundle);
             }
         });
 
@@ -92,10 +92,10 @@ public class LoginFragment extends Fragment {
 
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-     if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-         Snackbar.make(btnSignup, "Make sure to fill all fields", Snackbar.LENGTH_SHORT).show();
-         return;
-     }
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Snackbar.make(btnSignup, "Make sure to fill all fields", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override

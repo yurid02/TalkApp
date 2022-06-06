@@ -24,14 +24,14 @@ public class SignUpFragment extends Fragment {
 
     private EditText etEmail, etPassword, etRePassword, etUsername;
     private Button btnSignup, btnLogin;
-    private OnSignUpListener mOnSignUpListener;
+    private OnSignInListener mOnSignInListener;
     private FirebaseAuth mFirebaseAuth;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnSignUpListener) {
-            mOnSignUpListener = (OnSignUpListener) context;
+        if (context instanceof OnSignInListener) {
+            mOnSignInListener = (OnSignInListener) context;
         }
     }
 
@@ -72,30 +72,28 @@ public class SignUpFragment extends Fragment {
                     Snackbar.make(btnSignup, "Make sure to fill all fields", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
+                Bundle bundle = new Bundle();
+                bundle.putString("username", etUsername.getText().toString());
+                bundle.putInt("userStatus", 2);
+                mOnSignInListener.onSignInListener(bundle);
 
                 mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Bundle bundle = new Bundle();
+
                                 if (!task.isSuccessful()) {
-                                    //send data to firestore
                                     String errorMessage = task.getException().getLocalizedMessage();
                                     Snackbar.make(btnSignup, errorMessage, Snackbar.LENGTH_SHORT).show();
                                     if (task.getException().toString().toLowerCase().contains("usercollision")) {
                                         bundle.putInt("userStatus", 1);
                                         bundle.putString("email", email);
 
-                                        mOnSignUpListener.onSignUpClickListener(bundle);
+                                        mOnSignInListener.onSignInListener(bundle);
                                     }
                                     return;
-                                } else {
-                                    bundle.putInt("userStatus", 2);
-
-                                    bundle.putString("username", etUsername.getText().toString());
-
-                                    mOnSignUpListener.onSignUpClickListener(bundle);
                                 }
+
                             }
                         });
             }
@@ -108,12 +106,12 @@ public class SignUpFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("userStatus", 1);
                 bundle.putString("email", "");
-                mOnSignUpListener.onSignUpClickListener(bundle);
+                mOnSignInListener.onSignInListener(bundle);
             }
         });
     }
 
-    public interface OnSignUpListener {
-        void onSignUpClickListener(Bundle userStatus);
+    public interface OnSignInListener {
+        void onSignInListener(Bundle userStatus);
     }
 }

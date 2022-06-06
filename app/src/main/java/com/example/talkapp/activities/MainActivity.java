@@ -18,19 +18,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 
-public class MainActivity extends AppCompatActivity implements SignUpFragment.OnSignUpListener {
+public class MainActivity extends AppCompatActivity implements SignUpFragment.OnSignInListener {
 
     FragmentContainerView mFragmentContainerView;
     final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private String username;
     private int mUserStatusNumber;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkSignedIn();
+        initListeners();
 
         mFragmentContainerView = findViewById(R.id.fragmentContainer);
 
@@ -43,8 +44,7 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
     }
 
     @Override
-    public void onSignUpClickListener(Bundle userStatus) {
-        LoginFragment loginFragment = new LoginFragment();
+    public void onSignInListener(Bundle userStatus) {
 
         mUserStatusNumber = userStatus.getInt("userStatus");
 
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
                 break;
 
             case 1:
+                LoginFragment loginFragment = new LoginFragment();
                 loginFragment.setArguments(userStatus);
-                username = userStatus.getString("username");
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, loginFragment)
@@ -67,18 +67,29 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
                 break;
             case 2:
                 username = userStatus.getString("username");
-                checkSignedIn();
                 break;
         }
     }
 
-    private void checkSignedIn() {
-        mFirebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    private void initListeners() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                 if (user != null && mUserStatusNumber == 2) {
-                    Toast.makeText(MainActivity.this, ""+username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "" + username, Toast.LENGTH_SHORT).show();
 
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(username).build();
@@ -93,11 +104,11 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.On
                                     }
                                 }
                             });
-                } else if (user != null && user.getDisplayName() != null) {
+                } else if (user != null) {
                     startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     finish();
                 }
             }
-        });
+        };
     }
 }
