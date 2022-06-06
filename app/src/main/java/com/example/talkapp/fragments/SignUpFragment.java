@@ -53,6 +53,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +79,7 @@ public class SignUpFragment extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Bundle bundle = new Bundle();
                                 if (!task.isSuccessful()) {
+                                    //send data to firestore
                                     String errorMessage = task.getException().getLocalizedMessage();
                                     Snackbar.make(btnSignup, errorMessage, Snackbar.LENGTH_SHORT).show();
                                     if (task.getException().toString().toLowerCase().contains("usercollision")) {

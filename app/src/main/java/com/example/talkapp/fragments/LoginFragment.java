@@ -2,6 +2,7 @@ package com.example.talkapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,10 @@ public class LoginFragment extends Fragment {
 
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-
+     if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+         Snackbar.make(btnSignup, "Make sure to fill all fields", Snackbar.LENGTH_SHORT).show();
+         return;
+     }
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
