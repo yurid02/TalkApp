@@ -13,4 +13,5 @@
     <color name="background">#C1BEBE</color>
     <color name="back_card">#AEDFAF</color>
     <color name="edit">#F00E0E0E</color>
+    <color name="btn_color">#FFFFFFFF</color>
 </resources>
